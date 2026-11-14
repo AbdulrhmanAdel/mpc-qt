@@ -798,7 +798,7 @@ void MainWindow::setupPositionSlider()
 void MainWindow::setupVolumeSlider()
 {
     volumeSlider_ = new VolumeSlider();
-    volumeSlider_->setMinimumWidth(50);
+    volumeSlider_->setMinimumWidth(90);
     volumeSlider_->setMinimum(0);
     volumeSlider_->setMaximum(130);
     volumeSlider_->setValue(100);

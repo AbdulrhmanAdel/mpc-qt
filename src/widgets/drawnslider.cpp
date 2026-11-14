@@ -1,5 +1,6 @@
 // A simple(?) set of sliders related to controlling multimedia players.
 #include <QPainter>
+#include <QPainterPath>
 #include <cmath>
 #include "logger.h"
 #include "drawnslider.h"
@@ -128,11 +129,17 @@ double DrawnSlider::xToValue(double x)
     return qBound(minimum(), val, maximum());
 }
 
-void DrawnSlider::paintEvent(QPaintEvent *event)
+void DrawnSlider::refreshColors()
 {
-    Q_UNUSED(event)
-    if (redrawBackground || redrawHandle) {
-        QPalette pal = parentWidget()->palette();
+    QPalette pal = parentWidget() ? parentWidget()->palette() : palette();
+    QColor text = pal.color(QPalette::Normal, QPalette::WindowText);
+    progressColor = pal.color(QPalette::Normal, QPalette::Highlight);
+    knobColor = progressColor.lighter(115);
+    trackColor = text;
+    trackColor.setAlphaF(highContrast ? 0.45 : 0.18);
+    hoverColor = text;
+    hoverColor.setAlphaF(highContrast ? 0.35 : 0.16);
+    {
         if (highContrast) {
             grooveBorder = pal.color(QPalette::Normal, QPalette::Text);
             grooveFill   = pal.color(QPalette::Normal, QPalette::Window);
@@ -161,6 +168,13 @@ void DrawnSlider::paintEvent(QPaintEvent *event)
             }
         }
     }
+}
+
+void DrawnSlider::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+    if (redrawBackground || redrawHandle)
+        refreshColors();
 
     if (redrawBackground) {
         makeBackground();
@@ -314,8 +328,97 @@ void DrawnSlider::mouseMoveEvent(QMouseEvent *ev)
 }
 
 MediaSlider::MediaSlider(QWidget *parent) :
-    DrawnSlider(parent, QSize(11, 12), QSize(5, 3), 8)
+    DrawnSlider(parent, QSize(16, 16), QSize(8, 0), 7)
 {
+}
+
+// Modern seekbar: rounded track, filled progress, hover preview,
+// chapter gaps and a round knob that grows on hover/drag.
+void MediaSlider::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+    if (redrawBackground || redrawHandle) {
+        refreshColors();
+        redrawBackground = redrawHandle = false;
+    }
+
+    QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setOpacity(isEnabled() ? 1.0 : 0.4);
+
+    const bool active = hovering || isDragging;
+    const double thickness = active ? 6.0 : 4.0;
+    const double cy = height() / 2.0;
+    const double left = sliderArea.left();
+    const double right = std::max(left, sliderArea.right());
+    const double radius = thickness / 2.0;
+    const bool hasRange = minimum() != maximum();
+    QRectF track(left, cy - radius, right - left, thickness);
+
+    // Clip everything track-related to a rounded pill.
+    QPainterPath pill;
+    pill.addRoundedRect(track, radius, radius);
+    p.save();
+    p.setClipPath(pill);
+    p.setPen(Qt::NoPen);
+
+    p.fillRect(track, trackColor);
+
+    double pos = hasRange ? (isDragging ? qBound(left, xPosition, right)
+                                        : valueToX(value()))
+                          : left;
+
+    // Hover preview (lighter fill up to the mouse)
+    if (hovering && hasRange && hoverX > pos)
+        p.fillRect(QRectF(pos, track.top(), qBound(left, hoverX, right) - pos,
+                          thickness), hoverColor);
+
+    // Played portion
+    if (hasRange)
+        p.fillRect(QRectF(left, track.top(), pos - left, thickness), progressColor);
+
+    // A-B loop region
+    if (vLoopA >= 0 && vLoopB >= 0) {
+        QColor lc = loopColor;
+        lc.setAlphaF(0.55);
+        double a = valueToX(vLoopA), b = valueToX(vLoopB);
+        p.fillRect(QRectF(a, track.top(), b - a, thickness), lc);
+    }
+
+    // Chapter marks: small gaps in the track
+    if (hasRange) {
+        for (auto i = ticks.constBegin(); i != ticks.constEnd(); i++) {
+            double x = valueToX(i.key());
+            if (x <= left + 2.0 || x >= right - 2.0)
+                continue;
+            p.fillRect(QRectF(x - 1.0, track.top(), 2.0, thickness), bgColor);
+        }
+    }
+    p.restore();
+
+    // Single loop markers
+    p.setPen(QPen(loopColor, 2.0, Qt::SolidLine, Qt::RoundCap));
+    if (vLoopA >= 0 && vLoopB < 0) {
+        double a = valueToX(vLoopA);
+        p.drawLine(QPointF(a, cy - 7), QPointF(a, cy + 7));
+    } else if (vLoopB >= 0 && vLoopA < 0) {
+        double b = valueToX(vLoopB);
+        p.drawLine(QPointF(b, cy - 7), QPointF(b, cy + 7));
+    }
+
+    // Knob
+    if (hasRange && isEnabled()) {
+        double r = active ? 7.5 : 5.5;
+        p.setPen(Qt::NoPen);
+        p.setBrush(QColor(0, 0, 0, 90));
+        p.drawEllipse(QPointF(pos, cy + 1.0), r + 1.0, r + 1.0);
+        p.setBrush(knobColor);
+        p.drawEllipse(QPointF(pos, cy), r, r);
+        if (active) {
+            p.setBrush(QColor(255, 255, 255, 230));
+            p.drawEllipse(QPointF(pos, cy), r * 0.38, r * 0.38);
+        }
+    }
 }
 
 void MediaSlider::clearTicks()
@@ -437,17 +540,24 @@ void MediaSlider::makeHandle()
 void MediaSlider::enterEvent(QEnterEvent *event)
 {
     Q_UNUSED(event)
+    hovering = true;
+    update();
     emit hoverBegin();
 }
 
 void MediaSlider::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event)
+    hovering = false;
+    hoverX = -1;
+    update();
     emit hoverEnd();
 }
 
 void MediaSlider::handleHover(double x)
 {
+    hoverX = x;
+    update();
     double valueOfX = xToValue(x);
 
     emit hoverValue(valueOfX, valueToTickText(valueOfX), x);
@@ -493,8 +603,56 @@ QString MediaSlider::valueToTickText(double value)
 
 
 VolumeSlider::VolumeSlider(QWidget *parent) :
-    DrawnSlider(parent, QSize(10, 20), QSize(5, 10), 0)
+    DrawnSlider(parent, QSize(14, 20), QSize(7, 10), 0)
 {
+}
+
+void VolumeSlider::enterEvent(QEnterEvent *event)
+{
+    Q_UNUSED(event)
+    hovering = true;
+    update();
+}
+
+void VolumeSlider::leaveEvent(QEvent *event)
+{
+    Q_UNUSED(event)
+    hovering = false;
+    update();
+}
+
+// Modern volume slider: rounded track with fill and a round knob.
+void VolumeSlider::paintEvent(QPaintEvent *event)
+{
+    Q_UNUSED(event)
+    if (redrawBackground || redrawHandle) {
+        refreshColors();
+        redrawBackground = redrawHandle = false;
+    }
+
+    QPainter p(this);
+    p.setRenderHint(QPainter::Antialiasing);
+    p.setOpacity(isEnabled() ? 1.0 : 0.4);
+
+    const double cy = height() / 2.0;
+    const double left = sliderArea.left();
+    const double right = std::max(left, sliderArea.right());
+    const double thickness = 4.0;
+    QRectF track(left, cy - thickness / 2.0, right - left, thickness);
+    double pos = isDragging ? qBound(left, xPosition, right) : valueToX(value());
+
+    p.setPen(Qt::NoPen);
+    p.setBrush(trackColor);
+    p.drawRoundedRect(track, thickness / 2.0, thickness / 2.0);
+    p.setBrush(progressColor);
+    p.drawRoundedRect(QRectF(left, track.top(), pos - left, thickness),
+                      thickness / 2.0, thickness / 2.0);
+
+    double r = (hovering || isDragging) ? 6.5 : 5.0;
+    p.setBrush(QColor(0, 0, 0, 90));
+    p.drawEllipse(QPointF(pos, cy + 1.0), r + 1.0, r + 1.0);
+    p.setBrush(knobColor);
+    p.drawEllipse(QPointF(pos, cy), r, r);
 }
 
 void VolumeSlider::makeBackground()
