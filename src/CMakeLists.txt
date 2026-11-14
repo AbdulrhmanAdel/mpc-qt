@@ -28,6 +28,7 @@ set(SOURCES
     playlistwindow.cpp playlistwindow.h playlistwindow.ui
     propertieswindow.cpp propertieswindow.h propertieswindow.ui
     settingswindow.cpp settingswindow.h settingswindow.ui
+    subtitledownloader.cpp subtitledownloader.h
     storage.cpp storage.h
     thumbnailerwindow.cpp thumbnailerwindow.h thumbnailerwindow.ui
     widgets/actioneditor.cpp widgets/actioneditor.h

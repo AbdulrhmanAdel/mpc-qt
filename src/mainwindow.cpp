@@ -4,6 +4,7 @@
 #include "ui_mainwindow.h"
 #include "openfiledialog.h"
 #include "helpers.h"
+#include "subtitledownloader.h"
 #include "logger.h"
 #include "platform/unify.h"
 #include "platform/devicemanager.h"
@@ -1152,7 +1153,7 @@ void MainWindow::setUiEnabledState(bool enabled)
     ui->actionFileSaveSubtitle->setVisible(enabled && false);
     ui->menuFileSubtitleDatabase->setEnabled(enabled);
     ui->actionFileSubtitleDatabaseUpload->setEnabled(enabled && false);
-    ui->actionFileSubtitleDatabaseDownload->setEnabled(enabled && false);
+    ui->actionFileSubtitleDatabaseDownload->setEnabled(enabled);
     ui->actionPlayStop->setEnabled(enabled);
     ui->actionPlayFrameBackward->setEnabled(enabled);
     ui->actionPlayFrameForward->setEnabled(enabled);
@@ -2748,6 +2749,20 @@ void MainWindow::on_actionFileSubtitleDatabaseSearch_triggered() const
     QString fileNameNoExt = QFileInfo(currentFile.fileName()).completeBaseName();
     QDesktopServices::openUrl(QUrl("https://www.opensubtitles.org/search2/moviename-" +
                                    fileNameNoExt + "/sublanguageid-all"));
+}
+
+void MainWindow::on_actionFileSubtitleDatabaseDownload_triggered()
+{
+    if (!currentFile.isLocalFile()) {
+        QMessageBox::information(this, tr("Download Subtitles"),
+                                 tr("Subtitles can only be downloaded for local files."));
+        return;
+    }
+    auto *dialog = new SubtitleDownloadDialog(currentFile, this);
+    dialog->setAttribute(Qt::WA_DeleteOnClose);
+    connect(dialog, &SubtitleDownloadDialog::subtitleDownloaded,
+            this, [this](QUrl subs) { emit subtitlesLoaded(subs); });
+    dialog->show();
 }
 
 void MainWindow::on_actionFileClose_triggered()
