@@ -460,8 +460,14 @@ void SubtitleDownloadDialog::saveSubtitle(const QByteArray &data, const QString 
     auto writeTo = [&](const QString &dir) -> QString {
         QString base = dir + "/" + video.completeBaseName() + "." + lang;
         QString path = base + "." + suffix;
-        for (int n = 2; QFile::exists(path); n++)
+        for (int n = 2; QFile::exists(path); n++) {
+            // Same subtitle downloaded before: reuse it instead of saving a copy
+            QFile existing(path);
+            if (existing.size() == data.size() && existing.open(QIODevice::ReadOnly)
+                    && existing.readAll() == data)
+                return path;
             path = QString("%1.%2.%3").arg(base).arg(n).arg(suffix);
+        }
         QFile f(path);
         if (!f.open(QIODevice::WriteOnly))
             return {};
