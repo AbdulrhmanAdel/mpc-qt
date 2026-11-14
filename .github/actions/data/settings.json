@@ -100,8 +100,7 @@
     "fontComboBox": "Segoe UI",
     "fontItalic": false,
     "fontSize": 55,
-    "formatList": [
-    ],
+    "formatList": [],
     "framedroppingDecoderMode": 1,
     "framedroppingMode": 1,
     "fullscreenHideControls": true,
@@ -133,107 +132,117 @@
     "hwdecWmv3": true,
     "interfaceIconsCustomFolder": "",
     "interfaceIconsTheme": 0,
-    "interfaceWidgetCustom": false,
+    "interfaceWidgetCustom": true,
     "interfaceWidgetCustomPalette": [
         [
-            "#fcfcfc",
-            "#6e7173",
-            "#fcfcfc"
+            "#ffd4d4d4",
+            "#ff6e6e6e",
+            "#ffd4d4d4"
         ],
         [
-            "#31363b",
-            "#2f3338",
-            "#31363b"
+            "#ff3c3c3c",
+            "#ff3c3c3c",
+            "#ff3c3c3c"
         ],
         [
-            "#474d54",
-            "#454c52",
-            "#474d54"
+            "#ff595959",
+            "#ff595959",
+            "#ff595959"
         ],
         [
-            "#3a4045",
-            "#393e44",
-            "#3a4045"
+            "#ff4a4a4a",
+            "#ff4a4a4a",
+            "#ff4a4a4a"
         ],
         [
-            "#141618",
-            "#131517",
-            "#141618"
+            "#ff141414",
+            "#ff141414",
+            "#ff141414"
         ],
         [
-            "#24282b",
-            "#222629",
-            "#24282b"
+            "#ff383838",
+            "#ff383838",
+            "#ff383838"
         ],
         [
-            "#fcfcfc",
-            "#656768",
-            "#fcfcfc"
+            "#ffd4d4d4",
+            "#ff6e6e6e",
+            "#ffd4d4d4"
         ],
         [
-            "#ffffff",
-            "#ffffff",
-            "#ffffff"
+            "#ffffffff",
+            "#ff6e6e6e",
+            "#ffffffff"
         ],
         [
-            "#fcfcfc",
-            "#727679",
-            "#fcfcfc"
+            "#ffe0e0e0",
+            "#ff6e6e6e",
+            "#ffe0e0e0"
         ],
         [
-            "#1b1e20",
-            "#1a1d1f",
-            "#1b1e20"
+            "#ff171717",
+            "#ff171717",
+            "#ff171717"
         ],
         [
-            "#2a2e32",
-            "#282c30",
-            "#2a2e32"
+            "#ff282828",
+            "#ff282828",
+            "#ff282828"
         ],
         [
-            "#0f1012",
-            "#0e0f11",
-            "#0f1012"
+            "#ff0c0c0c",
+            "#ff0c0c0c",
+            "#ff0c0c0c"
         ],
         [
-            "#3daee9",
-            "#282c30",
-            "#1f485e"
+            "#ff3a99c7",
+            "#ff3a99c7",
+            "#ff3a99c7"
         ],
         [
-            "#fcfcfc",
-            "#6e7173",
-            "#fcfcfc"
+            "#ffffffff",
+            "#ff6e6e6e",
+            "#ffffffff"
         ],
         [
-            "#1d99f3",
-            "#1a4665",
-            "#1d99f3"
+            "#ff5cb8e6",
+            "#ff5cb8e6",
+            "#ff5cb8e6"
         ],
         [
-            "#9b59b6",
-            "#443051",
-            "#9b59b6"
+            "#ffa78bfa",
+            "#ffa78bfa",
+            "#ffa78bfa"
         ],
         [
-            "#232629",
-            "#212427",
-            "#232629"
+            "#ff202020",
+            "#ff202020",
+            "#ff202020"
         ],
         [
-            "#000000",
-            "#000000",
-            "#000000"
+            "#ff000000",
+            "#ff000000",
+            "#ff000000"
         ],
         [
-            "#31363b",
-            "#31363b",
-            "#31363b"
+            "#ff2b2b2b",
+            "#ff2b2b2b",
+            "#ff2b2b2b"
         ],
         [
-            "#fcfcfc",
-            "#fcfcfc",
-            "#fcfcfc"
+            "#ffe0e0e0",
+            "#ffe0e0e0",
+            "#ffe0e0e0"
+        ],
+        [
+            "#ff808080",
+            "#ff808080",
+            "#ff808080"
+        ],
+        [
+            "#ff3a99c7",
+            "#ff3a99c7",
+            "#ff3a99c7"
         ]
     ],
     "interfaceWidgetHighContast": false,
@@ -337,17 +346,14 @@
     "screenshotFormat": 0,
     "screenshotFormatHighBitDepth": true,
     "screenshotTemplate": "",
-    "shadersActiveList": [
-    ],
-    "shadersFileList": [
-    ],
+    "shadersActiveList": [],
+    "shadersFileList": [],
     "shadersPresetsList": -1,
-    "shadersWikiList": [
-    ],
+    "shadersWikiList": [],
     "sigmoidizedCenter": 0.75,
     "sigmoidizedSlope": 6.5,
-    "stylesheetFusion": false,
-    "stylesheetText": "",
+    "stylesheetFusion": true,
+    "stylesheetText": "/* MPC-HC (K-Lite) dark-mode look for mpc-qt.\n   Pairs with the palette in apply-modern-theme.sh. */\n* {\n    font-family: \"Noto Sans\";\n    font-size: 9pt;\n}\n\n/* ---------- Menu bar / menus ---------- */\nQMenuBar {\n    background-color: #202020;\n    color: #d4d4d4;\n    padding: 0px;\n}\nQMenuBar::item {\n    padding: 3px 7px;\n    background: transparent;\n}\nQMenuBar::item:selected { background-color: #3a3a3a; }\nQMenu {\n    background-color: #2b2b2b;\n    color: #d4d4d4;\n    border: 1px solid #3c3c3c;\n    padding: 2px;\n}\nQMenu::item { padding: 4px 24px 4px 22px; }\nQMenu::item:selected { background-color: #3f3f3f; color: #ffffff; }\nQMenu::item:disabled { color: #6e6e6e; }\nQMenu::separator { height: 1px; background: #3c3c3c; margin: 3px 6px; }\n\n/* ---------- Controls ---------- */\n#controlSection {\n    background-color: #282828;\n    border: none;\n    padding: 0px;\n}\n#controlbar QPushButton {\n    qproperty-iconSize: 16px 16px;\n    min-width: 24px;\n    min-height: 22px;\n    padding: 2px;\n    margin: 1px 0px;\n    background-color: transparent;\n    border: 1px solid transparent;\n    border-radius: 2px;\n}\n#controlbar QPushButton:hover   { background-color: #3a3a3a; border-color: #454545; }\n#controlbar QPushButton:pressed { background-color: #454545; }\n#controlbar QPushButton:checked { background-color: #3a3a3a; border-color: #4a4a4a; }\n\n/* ---------- Status bar ---------- */\n#statusbar {\n    background-color: #000000;\n}\n#statusbar QLabel {\n    color: #c8c8c8;\n    padding: 2px 6px;\n}\n\n/* ---------- Playlist / panels ---------- */\nQDockWidget { color: #d4d4d4; }\nQDockWidget::title { background-color: #202020; padding: 4px; }\nQListView, QTreeView, QTableView, QListWidget {\n    background-color: #1e1e1e;\n    alternate-background-color: #232323;\n    border: 1px solid #333333;\n    selection-background-color: #3a99c7;\n    selection-color: #ffffff;\n}\nQHeaderView::section {\n    background-color: #2b2b2b;\n    color: #bdbdbd;\n    border: none;\n    border-right: 1px solid #383838;\n    padding: 4px;\n}\nQTabBar::tab {\n    background: #282828;\n    color: #bdbdbd;\n    padding: 4px 10px;\n    border: 1px solid #383838;\n    border-bottom: none;\n}\nQTabBar::tab:selected { background: #333333; color: #ffffff; }\n\n/* ---------- Inputs ---------- */\nQLineEdit, QComboBox, QSpinBox, QDoubleSpinBox {\n    background-color: #1e1e1e;\n    border: 1px solid #3c3c3c;\n    padding: 3px 5px;\n}\nQLineEdit:focus, QComboBox:focus { border-color: #3a99c7; }\n\n/* ---------- Scrollbars ---------- */\nQScrollBar:vertical { background: #202020; width: 12px; margin: 0; }\nQScrollBar::handle:vertical { background: #4a4a4a; min-height: 30px; margin: 2px; }\nQScrollBar::handle:vertical:hover { background: #5a5a5a; }\nQScrollBar:horizontal { background: #202020; height: 12px; }\nQScrollBar::handle:horizontal { background: #4a4a4a; min-width: 30px; margin: 2px; }\nQScrollBar::add-line, QScrollBar::sub-line { height: 0; width: 0; }\nQScrollBar::add-page, QScrollBar::sub-page { background: transparent; }\n\nQToolTip {\n    background-color: #2b2b2b;\n    color: #e0e0e0;\n    border: 1px solid #3c3c3c;\n    padding: 3px 6px;\n}\n",
     "subsAlignmentBottom": true,
     "subsAlignmentBottomLeft": false,
     "subsAlignmentBottomRight": false,
@@ -433,5 +439,6 @@
     "webServePages": false,
     "windowInfoBackgroundValue": "000000",
     "windowInfoForegroundValue": "FFFFFF",
-    "windowVideoValue": "000000"
+    "windowVideoValue": "000000",
+    "interfaceWidgetDark": true
 }

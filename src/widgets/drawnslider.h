@@ -62,7 +62,7 @@ protected:
     QColor grooveBorder, grooveFill;
     QColor handleBorder, handleFill;
     QColor bgColor, loopColor, markColor;
-    QColor trackColor, progressColor, hoverColor, knobColor;
+    QColor trackColor, progressColor, tickColor, knobColor;
     int handleWidth, handleHeight, marginX, marginY, paddingHeight;
 
     void refreshColors();
