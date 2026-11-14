@@ -154,6 +154,11 @@ endif()
 
 add_subdirectory(res)
 
+# MPC-HC: optional built-in OpenSubtitles API key (from CI secret)
+if(NOT "$ENV{OPENSUBTITLES_API_KEY}" STREQUAL "")
+    target_compile_definitions(mpc-qt PRIVATE MPCHC_OPENSUBTITLES_KEY="$ENV{OPENSUBTITLES_API_KEY}")
+endif()
+
 target_link_libraries(mpc-qt PRIVATE
     Qt::Gui
     Qt::Network

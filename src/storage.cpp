@@ -26,6 +26,35 @@ Storage::Storage(QObject *parent) :
     QDir().mkpath(fetchConfigPath());
 }
 
+// Portable mode for the MPC-HC layout:
+//   <Root>/App/MPC-HC/        tar.gz bundle (APPDIR)   or
+//   <Root>/App/MPC-HC.AppImage
+//   <Root>/Data/              settings, history, theme, subtitle account
+// Used when <Root>/Data exists.  MPC_HC_DATA overrides the location.
+static QString portableDataPath()
+{
+    QString forced = qEnvironmentVariable("MPC_HC_DATA");
+    if (!forced.isEmpty())
+        return QDir(forced).absolutePath();
+
+    QString appFolder;   // the "App" folder
+    QString appImage = qEnvironmentVariable("APPIMAGE");
+    QString appDir = qEnvironmentVariable("APPDIR");
+    QString binDir = QCoreApplication::applicationDirPath();
+    if (!appImage.isEmpty()) {
+        appFolder = QFileInfo(appImage).absolutePath();
+    } else if (!appDir.isEmpty()) {
+        appFolder = QFileInfo(QDir::cleanPath(appDir)).absolutePath();
+    } else if (binDir.endsWith("/shared/bin")) {
+        // Bundle started without AppRun: <bundle>/shared/bin/mpc-qt
+        appFolder = QFileInfo(QDir::cleanPath(binDir + "/../..")).absolutePath();
+    }
+    if (appFolder.isEmpty())
+        return {};
+    QFileInfo data(QDir::cleanPath(appFolder + "/../Data"));
+    return data.isDir() && data.isWritable() ? data.absoluteFilePath() : QString();
+}
+
 QString Storage::fetchConfigPath()
 {
     if (Platform::isWindows) {
@@ -34,6 +63,8 @@ QString Storage::fetchConfigPath()
             configPath = d.absolutePath() + "/config";
         }
     }
+    if (configPath.isEmpty() && Platform::isUnix)
+        configPath = portableDataPath();
     if (configPath.isEmpty()) {
         configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/mpc-hc";
         configPath = Platform::fixedConfigPath(configPath);

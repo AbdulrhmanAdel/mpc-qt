@@ -1,4 +1,5 @@
 #include "subtitledownloader.h"
+#include "storage.h"
 
 #include <QDialogButtonBox>
 #include <QDir>
@@ -26,6 +27,13 @@
 
 static constexpr char userAgent[] = "MPC-HC v1.0";
 static constexpr char apiKeyHelpUrl[] = "https://www.opensubtitles.com/consumers";
+
+// Baked in at build time from the fork's OPENSUBTITLES_API_KEY secret,
+// so nobody has to enter a key (like MPC-HC ships its own).
+#ifndef MPCHC_OPENSUBTITLES_KEY
+#define MPCHC_OPENSUBTITLES_KEY ""
+#endif
+static constexpr char builtinApiKey[] = MPCHC_OPENSUBTITLES_KEY;
 
 namespace {
 enum Column { ColLanguage, ColRelease, ColDownloads, ColMatch, ColHearingImpaired };
@@ -191,8 +199,7 @@ QString SubtitleDownloadDialog::cleanQuery(const QString &baseName)
 
 QString SubtitleDownloadDialog::accountPath() const
 {
-    return QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
-            + "/mpc-hc/opensubtitles.json";
+    return Storage::fetchConfigPath() + "/opensubtitles.json";
 }
 
 void SubtitleDownloadDialog::loadAccount()
@@ -202,6 +209,8 @@ void SubtitleDownloadDialog::loadAccount()
     if (f.open(QIODevice::ReadOnly))
         obj = QJsonDocument::fromJson(f.readAll()).object();
     apiKey = obj.value("apiKey").toString();
+    if (apiKey.isEmpty())
+        apiKey = QString::fromLatin1(builtinApiKey);
     username = obj.value("username").toString();
     password = obj.value("password").toString();
     languagesEdit->setText(obj.value("languages").toString("ar,en"));
@@ -210,7 +219,8 @@ void SubtitleDownloadDialog::loadAccount()
 void SubtitleDownloadDialog::saveAccount()
 {
     QJsonObject obj;
-    obj["apiKey"] = apiKey;
+    // Don't copy the built-in key into the user's file
+    obj["apiKey"] = apiKey == QLatin1String(builtinApiKey) ? QString() : apiKey;
     obj["username"] = username;
     obj["password"] = password;
     obj["languages"] = languagesEdit->text().trimmed();
@@ -226,7 +236,10 @@ void SubtitleDownloadDialog::editAccount()
 {
     QDialog d(this);
     d.setWindowTitle(tr("OpenSubtitles.com Account"));
-    auto *keyEdit = new QLineEdit(apiKey, &d);
+    const bool builtin = apiKey == QLatin1String(builtinApiKey) && !apiKey.isEmpty();
+    auto *keyEdit = new QLineEdit(builtin ? QString() : apiKey, &d);
+    if (qstrlen(builtinApiKey) > 0)
+        keyEdit->setPlaceholderText(tr("Built-in key (leave empty)"));
     auto *userEdit = new QLineEdit(username, &d);
     auto *passEdit = new QLineEdit(password, &d);
     passEdit->setEchoMode(QLineEdit::Password);
@@ -248,6 +261,8 @@ void SubtitleDownloadDialog::editAccount()
     if (d.exec() != QDialog::Accepted)
         return;
     apiKey = keyEdit->text().trimmed();
+    if (apiKey.isEmpty())
+        apiKey = QString::fromLatin1(builtinApiKey);
     username = userEdit->text().trimmed();
     password = passEdit->text();
     token.clear();
@@ -479,8 +494,7 @@ void SubtitleDownloadDialog::saveSubtitle(const QByteArray &data, const QString 
     QString path = writeTo(video.absolutePath());
     if (path.isEmpty()) {
         // Read-only media folder: keep it in the config folder instead
-        QString fallback = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation)
-                + "/mpc-hc/subtitles";
+        QString fallback = Storage::fetchConfigPath() + "/subtitles";
         QDir().mkpath(fallback);
         path = writeTo(fallback);
     }
