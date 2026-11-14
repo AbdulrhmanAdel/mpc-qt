@@ -74,7 +74,7 @@ jobs:
 
   appimage:
     name: AppImage
-    needs: tests
+    needs: build
     uses: ./.github/workflows/appimage.yml
 
   flatpak:
