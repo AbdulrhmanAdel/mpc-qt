@@ -25,7 +25,7 @@
 #include <algorithm>
 #include <utility>
 
-static constexpr char userAgent[] = "MPCHC v1.0";   // matches the OpenSubtitles consumer name
+static constexpr char userAgent[] = "MPC HC v1.0";   // matches the OpenSubtitles consumer name
 static constexpr char apiKeyHelpUrl[] = "https://www.opensubtitles.com/consumers";
 
 // Baked in at build time from the fork's OPENSUBTITLES_API_KEY secret,
