@@ -27,7 +27,7 @@ jobs:
     - name: Start Xvfb
       uses: ./.github/actions/linux/commands/start_xvfb
     - name: Set CONFIGDIR environment variable
-      run: echo "CONFIGDIR=$HOME/.config/mpc-qt" >> $GITHUB_ENV
+      run: echo "CONFIGDIR=$HOME/.config/mpc-hc" >> $GITHUB_ENV
     - name: Start with config
       uses: ./.github/actions/linux/tests/start_with_config
     - name: Start with config and video

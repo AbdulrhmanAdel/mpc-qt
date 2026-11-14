@@ -36,7 +36,7 @@
 
 static constexpr char logModule[] =  "main";
 
-static constexpr char desktopFile[] = "io.github.mpc_qt.mpc-qt";
+static constexpr char desktopFile[] = "io.github.mpc_hc.mpc-hc";
 static constexpr char mpcQtIconPath[] = ":/images/icon/io.github.mpc_qt.mpc-qt.svg";
 
 static constexpr char keyCommand[] = "command";
@@ -52,7 +52,7 @@ static constexpr char optConsoleLogEx[] = "--log-to-console";
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setApplicationName("MPC-QT");
+    QCoreApplication::setApplicationName("MPC-HC");
     #if !defined(Q_OS_WIN)
     std::signal(SIGHUP, signalHandler);
     #endif

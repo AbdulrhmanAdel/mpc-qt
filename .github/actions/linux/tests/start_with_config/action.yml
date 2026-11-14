@@ -6,7 +6,7 @@ runs:
 
   steps:
   - name: Copy settings file
-    run:  mkdir -p ~/.config/mpc-qt/ && cp ./.github/actions/data/settings.json ~/.config/mpc-qt/settings.json
+    run:  mkdir -p ~/.config/mpc-hc/ && cp ./.github/actions/data/settings.json ~/.config/mpc-hc/settings.json
     shell: bash
   - name: Run mpc-qt
     uses: ./.github/actions/linux/commands/run_mpc-qt
@@ -19,8 +19,8 @@ runs:
       description: "config_and_translation"
   - name: Kill mpc-q
     uses: ./.github/actions/linux/commands/kill_mpc-qt
-  - name: ls ~/.config/mpc-qt/
-    run:  ls ~/.config/mpc-qt/
+  - name: ls ~/.config/mpc-hc/
+    run:  ls ~/.config/mpc-hc/
     shell: bash
   - name: cat log
     run:  |

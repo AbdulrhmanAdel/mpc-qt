@@ -12,8 +12,8 @@
 #include "ipc/json.h"
 
 static constexpr char logModule[] =  "ipc";
-static constexpr char serverNameJson[] = "cmdrkotori.mpc-qt";
-static constexpr char serverNameMpv[] = "cmdrkotori.mpc-qt.mpv";
+static constexpr char serverNameJson[] = "mpc-hc-linux";
+static constexpr char serverNameMpv[] = "mpc-hc-linux.mpv";
 
 Q_GLOBAL_STATIC_WITH_ARGS(QSet<QString>, bannedProperties, ({
     "stream-open-filename", "file-local-options", "ab-loop-a",

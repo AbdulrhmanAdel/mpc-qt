@@ -16,8 +16,8 @@ runs:
       description: "no_config"
   - name: Kill mpc-q
     uses: ./.github/actions/linux/commands/kill_mpc-qt
-  - name: ls ~/.config/mpc-qt/
-    run: ls ~/.config/mpc-qt/
+  - name: ls ~/.config/mpc-hc/
+    run: ls ~/.config/mpc-hc/
     shell: bash
   - name: Check that mpc-qt wrote favorites.json
     uses: ./.github/actions/commands/check_if_file_exists

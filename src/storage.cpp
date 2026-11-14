@@ -35,7 +35,7 @@ QString Storage::fetchConfigPath()
         }
     }
     if (configPath.isEmpty()) {
-        configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/mpc-qt";
+        configPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/mpc-hc";
         configPath = Platform::fixedConfigPath(configPath);
     }
     return configPath;

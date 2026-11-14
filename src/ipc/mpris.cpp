@@ -16,7 +16,7 @@ int MprisInstance::dbusCount = 0;
 MprisInstance::MprisInstance(QObject *parent) : QObject(parent),
   dbus(makeDBusConnection())
 {
-    dbusName_ = "org.mpris.MediaPlayer2.MpcQt";
+    dbusName_ = "org.mpris.MediaPlayer2.MpcHc";
     dbusId_ = dbusCount++;
     if (dbusId_ != 0)
         dbusName_.append(".instance" + QString::number(dbusId_));
@@ -165,7 +165,7 @@ QString MprisServer::identity()
 
 QString MprisServer::desktopEntry()
 {
-    return "io.github.mpc_qt.mpc-qt";
+    return "io.github.mpc_hc.mpc-hc";
 }
 
 QStringList MprisServer::uriSchemes()
