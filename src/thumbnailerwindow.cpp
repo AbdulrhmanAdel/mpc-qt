@@ -12,7 +12,7 @@
 
 // NOTE: do we configure the thumb format in the settings dialog?
 static constexpr char logModule[] = "thumbnailer";
-static constexpr char friendlyName[] = "Media Player Classic Qute Theater - Thumbnailer";
+static constexpr char friendlyName[] = "MPC-HC - Thumbnailer";
 static constexpr char thumbFormat[] = "%f_thumbs_[%t{yyyy.MM.dd_hh.mm.ss}]";
 static constexpr char saveDialogFilter[] = "Images (*.png *.jpg *.jpeg)";
 
@@ -263,7 +263,7 @@ void MpvThumbnailer::renderImage()
     selfFont.setPixelSize((captionArea.height() - (pageMargin + captionPadding))
                           * selfMetrics1000.height() / selfMetrics1000.ascent());
     QFontMetrics selfMetrics(selfFont);
-    QString self = "MPC-QT";
+    QString self = "MPC-HC";
     QRect selfRect = captionArea.adjusted(0, -selfMetrics.descent(),
                                           -pageMargin, selfMetrics.descent());
 

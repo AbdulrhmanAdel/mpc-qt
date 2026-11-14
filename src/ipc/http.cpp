@@ -640,7 +640,7 @@ void MpcHcServer::setupHttp()
     http.route("/info.html", [this](HttpRequest &req, HttpResponse &res) {
         (void)req;
         QString str("&laquo; %1 &bull; %2 &bull; %3/%4 &bull; %5 &raquo;");
-        QString version("MPC-QT v" + About::version());
+        QString version("MPC-HC v" + About::version());
         QString time(Helpers::toDateFormatFixed(fileTime, Helpers::ShortFormat));
         QString duration(Helpers::toDateFormatFixed(fileDuration, Helpers::ShortFormat));
         QString size(Helpers::fileSizeToStringShort(fileSize));

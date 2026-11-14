@@ -241,7 +241,7 @@ void Flow::parseArgs()
 {
     Logger::log(logModule, "parsing arguments");
     QCommandLineParser parser;
-    parser.setApplicationDescription(tr("Media Player Classic Qute Theater"));
+    parser.setApplicationDescription("MPC-HC");
     parser.addHelpOption();
     parser.addVersionOption();
 

@@ -160,7 +160,7 @@ void MprisServer::setFullscreen(bool yes)
 
 QString MprisServer::identity()
 {
-    return "Media Player Classic Qute Theater";
+    return "MPC-HC";
 }
 
 QString MprisServer::desktopEntry()

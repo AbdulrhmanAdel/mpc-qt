@@ -26,7 +26,7 @@
 using namespace Helpers;
 static constexpr char logModule[] =  "mainwindow";
 static constexpr char SKIPACTION[] = "Skip";
-static constexpr char textWindowTitle[] = "Media Player Classic Qute Theater";
+static constexpr char textWindowTitle[] = "MPC-HC";
 static constexpr char mpcQtIconPath[] = ":/images/icon/io.github.mpc_qt.mpc-qt.svg";
 static constexpr char tinyIconPath[] = ":/images/icon/tinyicon.svg";
 

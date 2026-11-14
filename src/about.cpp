@@ -39,9 +39,11 @@ void About::showAbout(QWidget *parent, QString mpvVersion, QString ffmpegVersion
         else
             displayMode = "X11";
     }
-    QMessageBox::about(parent, tr("About Media Player Classic Qute Theater"),
-      "<h2>" + tr("Media Player Classic Qute Theater") + "</h2>" +
-      "<p>" +  tr("A clone of Media Player Classic written in Qt") +
+    QMessageBox::about(parent, "About MPC-HC",
+      QString("<h2>MPC-HC</h2>") +
+      "<p>" +  "Media Player Classic look for Linux" +
+      "<br>" + "Personal build of mpc-qt (Media Player Classic Qute Theater) "
+               "with an MPC-HC dark-mode seekbar. All credit to the mpc-qt authors." +
       "<br>" + tr("Based on Qt %1 and %2").arg(QT_VERSION_STR, mpvVersion) +
       "<br>" + QString("ffmpeg %1").arg(ffmpegVersion) +
       (Platform::isUnix ? "<br>" + tr("Running on %1").arg(displayMode) : "") +
