@@ -62,11 +62,13 @@ protected:
     QColor grooveBorder, grooveFill;
     QColor handleBorder, handleFill;
     QColor bgColor, loopColor, markColor;
+    QColor trackColor, progressColor, hoverColor, knobColor;
     int handleWidth, handleHeight, marginX, marginY, paddingHeight;
 
-private:
-
+    void refreshColors();
     double xPosition = 0.0;
+
+private:
 
     double vValue = 0.0;
     double vMaximum = 0.0;
@@ -93,6 +95,7 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void paintEvent(QPaintEvent *event) override;
     void makeBackground() override;
     void makeHandle() override;
     void enterEvent(QEnterEvent *event) override;
@@ -107,6 +110,8 @@ protected:
     double vLoopA = -1;
     double vLoopB = -1;
     QRectF loopArea = { -1, -1, 0, 0};
+    bool hovering = false;
+    double hoverX = -1;
 };
 
 class VolumeSlider : public DrawnSlider {
@@ -116,7 +121,11 @@ public:
     explicit VolumeSlider(QWidget *parent = nullptr);
 
 protected:
+    void paintEvent(QPaintEvent *event) override;
+    void enterEvent(QEnterEvent *event) override;
+    void leaveEvent(QEvent *event) override;
     void makeBackground() override;
     void makeHandle() override;
+    bool hovering = false;
 };
 #endif // QDRAWNSLIDER_H
